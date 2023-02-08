@@ -58,7 +58,7 @@ public class AdminDictController {
      * <p>
      * 3. 直接写，这里注意，finish的时候会自动关闭OutputStream,当然你外面再关闭流问题不大
      */
-    @ApiOperation("Excel数据的导出")
+    @ApiOperation("数据导出为Excel")
     @GetMapping("/dict/export")
     public void export(HttpServletResponse response){
         try {
@@ -68,7 +68,8 @@ public class AdminDictController {
             // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
             String fileName = URLEncoder.encode("myDict", "UTF-8").replaceAll("\\+", "%20");
             response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
-            EasyExcel.write(response.getOutputStream(), ExcelDictDTO.class).sheet("数据字典").doWrite(dictService.listDictData());
+            EasyExcel.write(response.getOutputStream(), ExcelDictDTO.class).sheet("数据字典")
+                    .doWrite(dictService.listDictData());
         } catch (IOException e) {
             throw new BusinessException(ResponseEnum.EXPORT_DATA_ERROR,e);
         }

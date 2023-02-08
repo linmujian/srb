@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2022-11-02
  */
 public interface BorrowerAttachService extends IService<BorrowerAttach> {
-
+    
     List<BorrowerAttachVO> selectBorrowerAttachVOList(Long borrowerId);
 
 }

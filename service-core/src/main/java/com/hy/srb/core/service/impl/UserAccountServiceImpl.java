@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hy.common.exception.Assert;
 import com.hy.common.result.ResponseEnum;
+import com.hy.srb.base.dto.SmsDTO;
 import com.hy.srb.core.enums.TransTypeEnum;
 import com.hy.srb.core.hfb.FormHelper;
 import com.hy.srb.core.hfb.HfbConst;
@@ -17,7 +18,10 @@ import com.hy.srb.core.service.TransFlowService;
 import com.hy.srb.core.service.UserAccountService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hy.srb.core.service.UserBindService;
+import com.hy.srb.core.service.UserInfoService;
 import com.hy.srb.core.utils.LendNoUtils;
+import com.hy.srb.rabbitmq.constant.MQConst;
+import com.hy.srb.rabbitmq.service.RabbitMQService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +47,9 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
     private UserInfoMapper userInfoMapper;
 
     @Resource
+    private UserInfoService userInfoService;
+
+    @Resource
     private TransFlowService transFlowService;
 
     @Resource
@@ -50,6 +57,9 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
 
     @Resource
     private UserAccountService userAccountService;
+
+    @Resource
+    private RabbitMQService rabbitMQService;
 
     @Override
     public String commitCharge(BigDecimal chargeAmt, Long userId) {
@@ -105,6 +115,13 @@ public class UserAccountServiceImpl extends ServiceImpl<UserAccountMapper, UserA
                 TransTypeEnum.RECHARGE,
                 "充值");
         transFlowService.saveTransFlow(transFlowBO);
+
+        //调用rabbitmqService发送消息
+        String phone=userInfoService.getPhoneByBindCode(bindCode);
+        SmsDTO smsDTO = new SmsDTO();
+        smsDTO.setPhone(phone);
+        smsDTO.setMessage("充值成功");
+        rabbitMQService.send(MQConst.EXCHANGE_TOPIC_SMS, MQConst.ROUTING_SMS_ITEM, smsDTO);
 
         return "success";
     }

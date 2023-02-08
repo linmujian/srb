@@ -31,6 +31,14 @@ spring:
       discovery:
         server-addr: localhost:8848 # nacos服务地址
 
+  #spring:
+  rabbitmq:
+    host: 192.168.100.103
+    port: 5672
+    virtual-host: /srbhost
+    username: admin
+    password: iamhappyboy9420
+
 mybatis-plus: #mybatis
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #mybatis-plus的日志

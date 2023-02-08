@@ -20,6 +20,8 @@ import com.hy.srb.core.pojo.vo.UserInfoVO;
  */
 public interface UserInfoService extends IService<UserInfo> {
 
+    String getPhoneByBindCode(String bindCode);
+
     void register(RegisterVO registerVO);
 
     UserInfoVO login(LoginVO loginVO, String ip);

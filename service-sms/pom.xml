@@ -12,6 +12,13 @@
     <artifactId>service-sms</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.hy.srb</groupId>
+            <artifactId>rabbitmq</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>com.hy</groupId>
             <artifactId>service-base</artifactId>

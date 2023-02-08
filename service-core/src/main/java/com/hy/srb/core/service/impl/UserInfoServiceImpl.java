@@ -43,6 +43,15 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
     @Resource
     private UserLoginRecordMapper userLoginRecordMapper;
 
+    @Override
+    public String getPhoneByBindCode(String bindCode) {
+        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
+        userInfoQueryWrapper.eq("bind_code", bindCode);
+        UserInfo userInfo = baseMapper.selectOne(userInfoQueryWrapper);
+        String mobile = userInfo.getMobile();
+        return mobile;
+    }
+
     @Transactional(rollbackFor = {Exception.class})
     @Override
     public void register(RegisterVO registerVO) {
