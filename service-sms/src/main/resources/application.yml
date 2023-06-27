@@ -52,7 +52,7 @@ logging:
 aliyun:
   sms:
     region-id: cn-hangzhou
-    key-id: LTAI5tAswVLFXthxTnQFQr8j
-    key-secret: 47OreiFhEjuEZTRfI7foRypTT7sP9v
+    key-id: ***
+    key-secret: ***
     template-code: SMS_154950909
     sign-name: 阿里云短信测试
